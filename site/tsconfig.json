@@ -23,7 +23,10 @@
 			"./types"
 		],
 		"noEmit": true,
-		"strict": true
+		"strict": true,
+		"skipLibCheck": true,
+		"incremental": true,
+		"tsBuildInfoFile": "./.tsbuildinfo"
 	},
 	"ts-node": {
 		"transpileOnly": true

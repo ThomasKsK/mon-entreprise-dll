@@ -44,7 +44,9 @@ export function SimulationValue({
 	contexte = {},
 }: SimulationValueProps) {
 	const engine = useEngine()
-	const currentUnit = useSelector(targetUnitSelector)	const displayCents = useSelector(displayCentsSelector)	const language = useTranslation().i18n.language
+	const currentUnit = useSelector(targetUnitSelector)
+	const displayCents = useSelector(displayCentsSelector)
+	const language = useTranslation().i18n.language
 	const evaluation = engine.evaluate({
 		valeur: dottedName,
 		arrondi: round ? 'oui' : 'non',
@@ -103,7 +105,7 @@ export function SimulationValue({
 						<StyledBody id={`${elementIdPrefix}-value`}>
 							{formatValue(evaluation, {
 								displayedUnit,
-							precision: displayCents ? 2 : round ? 0 : 2,
+								precision: displayCents ? 2 : round ? 0 : 2,
 								language,
 							})}
 						</StyledBody>
