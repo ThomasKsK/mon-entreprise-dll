@@ -21,6 +21,7 @@ export type Simulation = {
 	hiddenNotifications: Array<string>
 	situation: SituationPublicodes
 	targetUnit: string
+	displayCents: boolean
 	questionsRépondues: Array<QuestionRépondue>
 	questionsSuivantes?: Array<DottedName>
 	currentQuestion?: DottedName | null
@@ -39,6 +40,7 @@ export function simulationReducer(
 			hiddenNotifications: [],
 			situation: {},
 			targetUnit: config['unité par défaut'] || '€/mois',
+			displayCents: false,
 			questionsRépondues: [],
 			currentQuestion: null,
 		}
@@ -60,6 +62,7 @@ export function simulationReducer(
 				...state,
 				hiddenNotifications: [],
 				situation: {},
+				displayCents: false,
 				questionsRépondues: [],
 				currentQuestion: null,
 			}
@@ -290,6 +293,12 @@ export function simulationReducer(
 			return {
 				...state,
 				targetUnit: action.targetUnit,
+			}
+
+		case 'SET_DISPLAY_CENTS':
+			return {
+				...state,
+				displayCents: action.displayCents,
 			}
 	}
 

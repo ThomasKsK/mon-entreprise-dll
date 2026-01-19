@@ -1,11 +1,14 @@
 import { pipe } from 'effect'
 import * as R from 'effect/Record'
+import { useDispatch, useSelector } from 'react-redux'
 import { css, styled } from 'styled-components'
 
 import * as M from '@/domaine/Montant'
 import { montant, Montant } from '@/domaine/Montant'
 import { UnitéMonétaire, UnitéMonétaireRécurrente } from '@/domaine/Unités'
 import { useSelection } from '@/hooks/UseSelection'
+import { setDisplayCents } from '@/store/actions/actions'
+import { displayCentsSelector } from '@/store/selectors/simulationSelectors'
 import { NoOp } from '@/utils/NoOp'
 
 import { NumericInput } from '../../atoms/NumericInput'
@@ -53,18 +56,31 @@ export const MontantField = <U extends UnitéMonétaire>({
 	label,
 	aria,
 }: MontantFieldProps<U>) => {
+	const dispatch = useDispatch()
+	const displayCents = useSelector(displayCentsSelector)
 	const { handleChange, currentSelection: currentValue } = useSelection({
 		value,
 		onChange,
 	})
 
 	const handleValueChange = (valeur: number | undefined) => {
+		// Détecter si l'utilisateur saisit des décimales
+		if (valeur !== undefined && !displayCents) {
+			// Vérifier si la valeur a des décimales (n'est pas un entier)
+			if (valeur !== Math.floor(valeur)) {
+				dispatch(setDisplayCents(true))
+			}
+		}
+
 		handleChange(valeur === undefined ? undefined : montant<U>(valeur, unité))
 	}
 
 	const convertisseur =
 		unitéRécurrenteCible &&
 		(unitéRécurrenteCible === '€/mois' ? M.toEurosParMois : M.toEurosParAn)
+
+	// Utiliser displayCents global ou la prop locale avecCentimes
+	const afficherCentimes = avecCentimes || displayCents
 
 	return (
 		<Container $noPadding={unité !== '€'}>
@@ -79,7 +95,7 @@ export const MontantField = <U extends UnitéMonétaire>({
 					style: 'currency',
 					currency: 'EUR',
 					minimumFractionDigits: 0,
-					maximumFractionDigits: avecCentimes ? 2 : 0,
+					maximumFractionDigits: afficherCentimes ? 2 : 0,
 				}}
 				placeholder={placeholder?.valeur}
 				value={currentValue?.valeur}

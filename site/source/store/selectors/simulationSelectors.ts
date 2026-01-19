@@ -67,4 +67,7 @@ export const previousSimulationSelector = (state: RootState) =>
 export const targetUnitSelector = (state: RootState) =>
 	state.simulation?.targetUnit ?? '€/mois'
 
+export const displayCentsSelector = (state: RootState) =>
+	state.simulation?.displayCents ?? false
+
 export const urlSelector = (state: RootState) => state.simulation?.url

@@ -17,7 +17,10 @@ import { ValeurPublicodes } from '@/domaine/engine/PublicodesAdapter'
 import { Montant } from '@/domaine/Montant'
 import { UnitéMonétaire } from '@/domaine/Unités'
 import { ajusteLaSituation } from '@/store/actions/actions'
-import { targetUnitSelector } from '@/store/selectors/simulationSelectors'
+import {
+	displayCentsSelector,
+	targetUnitSelector,
+} from '@/store/selectors/simulationSelectors'
 
 type SimulationGoalProps = {
 	dottedName: DottedName
@@ -47,6 +50,7 @@ export function SimulationGoal({
 	const dispatch = useDispatch()
 	const engine = useEngine()
 	const currentUnit = useSelector(targetUnitSelector)
+	const displayCents = useSelector(displayCentsSelector)
 	const language = useTranslation().i18n.language
 
 	const evaluation = engine.evaluate({
@@ -100,7 +104,7 @@ export function SimulationGoal({
 
 	const valeurFormatee = formatValue(evaluation, {
 		displayedUnit,
-		precision: round ? 0 : 2,
+		precision: displayCents ? 2 : round ? 0 : 2,
 		language,
 	}) as string
 
@@ -125,7 +129,7 @@ export function SimulationGoal({
 			missing={dottedName in evaluation.missingVariables}
 			small={small}
 			formatOptions={{
-				maximumFractionDigits: round ? 0 : 2,
+				maximumFractionDigits: displayCents ? 2 : round ? 0 : 2,
 			}}
 		/>
 	) : undefined

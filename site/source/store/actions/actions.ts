@@ -25,6 +25,7 @@ export type Action =
 			| typeof enregistreLesRéponses
 			| typeof deleteFromSituation
 			| typeof updateUnit
+			| typeof setDisplayCents
 			| typeof batchUpdateSituation
 			| typeof questionsSuivantes
 			| typeof applicabilitéDesQuestionsRépondues
@@ -111,6 +112,12 @@ export const updateUnit = (targetUnit: string) =>
 	({
 		type: 'UPDATE_TARGET_UNIT',
 		targetUnit,
+	}) as const
+
+export const setDisplayCents = (displayCents: boolean) =>
+	({
+		type: 'SET_DISPLAY_CENTS',
+		displayCents,
 	}) as const
 
 export function loadPreviousSimulation() {
